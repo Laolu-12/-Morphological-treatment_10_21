@@ -10,7 +10,7 @@ int main()
 	cv::Mat labels, stats, centroids;
 	cv::Mat element; // 结构算子
 	int Kernelsize = 5;
-	int num;
+	int num=0;
 
 
 	threshold(srcMat, binary, 100, 255, THRESH_OTSU); //使用大津法进行二值化
@@ -21,9 +21,16 @@ int main()
 	dstMat = 255 - binary;
 	imshow("反置后图像", dstMat);
 
-	num = connectedComponentsWithStats(dstMat, labels, stats, centroids, 8, CV_32S);
+	connectedComponentsWithStats(dstMat, labels, stats, centroids, 8, CV_32S);
+	for (int a = 0; a < stats.rows; a++)
+	{
+		long *data = stats.ptr<long>(a);
+		if (data[4] > 4000 && data[4] < 10000) //观察stats状态后发现面积在这个范围内，属于回形针
+			num++;
+	}
 
-	cout << "个数为：" << num - 1 << endl; //减去背景数量
+	cout << "回形针个数为：" << num  << endl; //减去背景数量
+	cout << stats << endl;
 
 
 
