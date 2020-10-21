@@ -23,22 +23,20 @@ int main()
 	connectedComponentsWithStats(CloseImg, labels, stats, centroids, 8, CV_32S); //连通域标记
 	for (int a = 0; a < stats.rows; a++)
 	{
+
 		long* data = stats.ptr<long>(a);
 		if (data[4] < 10000)//面积太大的连通域肯定是背景
 		{
 			Count++;
-			Start.x = data[0];
+			Start.x = data[0]; //起点
 			Start.y = data[1];
-			End.x = Start.x + data[2];
-			End.y = Start.y + data[3];
-			rectangle(srcMat, Start, End, CV_RGB(255, 255, 255), 3);
+			End.x = Start.x + data[2]; //起点横坐标+宽度=终点横坐标
+			End.y = Start.y + data[3]; //起点纵坐标+高度=终点纵坐标
+			rectangle(srcMat, Start, End, CV_RGB(255, 255, 255), 3); //绘制外接四边形
 
-		}
-		
-			
+		}			
 	}
-	//std::cout << num << std::endl;
-	cout << "计数结果为：" << Count << endl;
+	cout << "硬币个数为：" << Count << endl;
 	imshow("原图", srcMat);
 	
 
